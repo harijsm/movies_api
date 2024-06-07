@@ -20,8 +20,7 @@ class MovieBroadcast extends Model
 
     public function scopeAiringAndInFuture(Builder $query, int $running_time = 0): Builder
     {
-        $timestamp = strtotime(date("Y-m-d H:i:s")) - ($running_time * 60);
-        return $query->where('broadcasts_at', '>=', date("Y-m-d H:i:s", $timestamp));
+        return $query->where('broadcasts_at', '>=', now()->addMinute(-$running_time));
     }
 
     public function scopeChannelMovieBroadcastingDate(Builder $query, string $channel, string $datetime): Builder

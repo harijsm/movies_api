@@ -21,7 +21,6 @@ class MovieFactory extends Factory
             'rating' => fake()->randomFloat(1, 0, 10),
             'age_restriction' => fake()->randomElement(\App\Models\Movie::$validAgeRestrictions),
             'description' => fake()->text,
-            'premieres_at' => fake()->dateTimeBetween('-1 month', '+1 month'),
             'running_time' => fake()->numberBetween(30, 240),
         ];
     }

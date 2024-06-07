@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Movie;
 
 class MovieBroadcastSeeder extends Seeder
 {
@@ -12,20 +13,28 @@ class MovieBroadcastSeeder extends Seeder
      */
     public function run(): void
     {
-        $movies = \App\Models\Movie::all();
-        $channels = range(1, 10);
+        $channels = 50;
+        $movies = Movie::all();
 
-        foreach ($movies as $movie) {
-            $broadcasts = [];
+        for($i = 1; $i <= $channels; $i++) {
+            $moviesToBroadcast = $movies->random(rand(30, 50));
+            $lastBroadcastTime = now()->addDays(rand(-5, 30))->addHours(rand(1, 24));
 
-            for ($i = 0; $i < 15; $i++) {
-                $broadcasts[] = [
-                    'channel_nr' => $channels[array_rand($channels)],
-                    'broadcasts_at' => now()->addDays(rand(1, 30))->addHours(rand(1, 24)),
-                ];
+            foreach ($moviesToBroadcast as $movie) {
+                if(!$movie->premieres_at || $movie->premieres_at->gt($lastBroadcastTime)) {
+                    $movie->update([
+                        'premieres_at' => $lastBroadcastTime,
+                    ]);
+                }
+
+                $movie->broadcasts()->create([
+                    'channel_nr' => $i,
+                    'broadcasts_at' => $lastBroadcastTime,
+                ]);
+
+                $commercialBreakMinutes = rand(15, 35);
+                $lastBroadcastTime = $lastBroadcastTime->addMinutes($movie->running_time + $commercialBreakMinutes);
             }
-
-            $movie->broadcasts()->createMany($broadcasts);
         }
     }
 }

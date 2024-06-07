@@ -17,7 +17,8 @@ class MovieBroadcastController extends Controller
      */
     public function index(Movie $movie) : AnonymousResourceCollection
     {
-        $broadcasts = $movie->broadcasts()->airingAndInFuture($movie->running_time)->OrderBy('broadcasts_at')->paginate(10);
+        $limit = request()->input('limit', 10);
+        $broadcasts = $movie->broadcasts()->airingAndInFuture($movie->running_time)->OrderBy('broadcasts_at')->paginate($limit);
         $broadcasts->load('movie');
         
         return MovieBroadcastResource::collection($broadcasts);
@@ -40,6 +41,10 @@ class MovieBroadcastController extends Controller
         }
 
         $broadcast = $movie->broadcasts()->create($data);
+
+        if(!$movie->premieres_at && $broadcast) {
+            $movie->update(['premieres_at' => $broadcast->broadcasts_at]);
+        }
 
         return new MovieBroadcastResource($broadcast);
     }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->float('rating')->default(0.0)->nullable(false);
             $table->char('age_restriction', 2)->nullable();
             $table->string('description', 500);
-            $table->timestamp('premieres_at');
+            $table->timestamp('premieres_at')->nullable();
             $table->unsignedSmallInteger('running_time')->default(0)->nullable(false);
             $table->timestamps();
         });
