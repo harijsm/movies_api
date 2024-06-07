@@ -10,8 +10,18 @@ use App\Models\Movie;
 use App\Models\MovieBroadcast;
 use App\Http\Resources\MovieBroadcastResource;
 
-class MovieBroadcastController extends Controller
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+
+class MovieBroadcastController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(middleware: 'auth:sanctum', except: ['index', 'show'])
+        ];
+    }
+
     /**
      * Return a list of all broadcasts airing now or in the future for single movie.
      *

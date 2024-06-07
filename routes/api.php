@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\MovieController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MovieBroadcastController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -8,6 +9,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::apiResource('movies', MovieController::class)->except(["show", "update"]);
 Route::get('movies/{movie}', [MovieBroadcastController::class, 'index']);

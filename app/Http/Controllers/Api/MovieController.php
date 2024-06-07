@@ -8,8 +8,19 @@ use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Http\Resources\MovieResource;
 
-class MovieController extends Controller
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+
+class MovieController extends Controller implements HasMiddleware
 {
+    
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(middleware: 'auth:sanctum', except: ['index'])
+        ];
+    }
+
     /**
      * Display a list of all Movies.
      *
