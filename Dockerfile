@@ -27,9 +27,5 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# copy composer.json to workdir & install dependencies
-COPY composer.json ./
-RUN composer install
-
 # Set the default command to run php-fpm
 CMD ["php-fpm"]

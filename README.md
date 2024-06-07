@@ -15,6 +15,12 @@
     DB_PASSWORD=root
 ```
 
+Instalēt dependencies
+
+```
+docker exec php_laravel composer install
+```
+
 migrācijas (noņemt ```--seed```, ja nav nepieviešami test dati):
 
 ```
