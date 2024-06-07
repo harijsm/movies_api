@@ -20,6 +20,13 @@ class Movie extends Model
         return $this->hasMany(MovieBroadcast::class);
     }
 
+    /**
+     * Scope a query to filter movies by title.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $title
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeTitle(Builder $query, string $title): Builder
     {
         return $query->where('title', 'LIKE', '%' . $title . '%');

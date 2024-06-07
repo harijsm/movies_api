@@ -11,21 +11,28 @@ use App\Http\Resources\MovieResource;
 class MovieController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a list of all Movies.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \App\Http\Resources\MovieResource
      */
     public function index(Request $request) : MovieResource
     {
         $title = $request->input('title');
+        $limit = $request->input('limit', 10);
         $movies = Movie::when(
             $title,
             fn($query, $title) => $query->title($title)
         );
 
-        return new MovieResource($movies->latest()->paginate(10));
+        return new MovieResource($movies->latest()->paginate($limit));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created movie in the database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \App\Http\Resources\MovieResource
      */
     public function store(Request $request) : MovieResource
     {
@@ -43,24 +50,10 @@ class MovieController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Movie $movie) : MovieResource
-    {
-        $movie->load('broadcasts');
-        return new MovieResource($movie);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * Delete a movie.
+     *
+     * @param  \App\Models\Movie  $movie
+     * @return \Illuminate\Http\Response
      */
     public function destroy(Movie $movie) : \Illuminate\Http\Response
     {

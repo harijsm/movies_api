@@ -13,7 +13,10 @@ use App\Http\Resources\MovieBroadcastResource;
 class MovieBroadcastController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Return a list of all broadcasts airing now or in the future for single movie.
+     *
+     * @param  \App\Models\Movie  $movie
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(Movie $movie) : AnonymousResourceCollection
     {
@@ -25,7 +28,12 @@ class MovieBroadcastController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a new movie broadcast.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Movie  $movie
+     * @return \App\Http\Resources\MovieBroadcastResource
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request, Movie $movie) : MovieBroadcastResource
     {
@@ -50,7 +58,11 @@ class MovieBroadcastController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified movie broadcast.
+     *
+     * @param  \App\Models\Movie  $movie
+     * @param  \App\Models\MovieBroadcast  $broadcast
+     * @return \App\Http\Resources\MovieBroadcastResource
      */
     public function show(Movie $movie, MovieBroadcast $broadcast) : MovieBroadcastResource
     {
@@ -58,15 +70,11 @@ class MovieBroadcastController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * Delete a movie broadcast.
+     *
+     * @param string $movie The movie identifier.
+     * @param MovieBroadcast $broadcast The movie broadcast instance.
+     * @return \Illuminate\Http\Response
      */
     public function destroy(string $movie, MovieBroadcast $broadcast) : \Illuminate\Http\Response
     {
