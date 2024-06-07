@@ -4,7 +4,7 @@
     docker-compose up
 ```
 
-.env izmaiņas, lai pieslēgtos db:
+.env faila izmaiņas, lai pieslēgtos db:
 
 ```
     DB_CONNECTION=mysql
@@ -15,10 +15,21 @@
     DB_PASSWORD=root
 ```
 
-migrācijas:
+migrācijas (noņemt ```--seed```, ja nav nepieviešami test dati):
 
 ```
-docker exec php_laravel php artisan migrate
+docker exec php_laravel php artisan migrate --seed
 ```
 
-http://127.0.0.1:7007
+Base URL:
+```
+http://127.0.0.1:7007/api/
+```
+
+API pieprasījumu kolekcija Postman failā:
+```
+movie_api.postman_collection.json
+```
+
+kā pirmo uztaisīt pieprasījumu ```User login``` (POST uz http://127.0.0.1:7007/api/login)
+lai Postman saglabā autorizācijas tokenu, kurš tiks izmantots API gala pieprasījumiem (create / destroy) kam nepieciešama autorizācija.
