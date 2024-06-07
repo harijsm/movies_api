@@ -14,6 +14,14 @@ class MovieBroadcastResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'movie_id' => $this->movie_id,
+            'channel_nr' => $this->channel_nr,
+            'broadcasts_at' => $this->broadcasts_at,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'movie' => new MovieResource($this->whenLoaded('movie')),
+        ];
     }
 }

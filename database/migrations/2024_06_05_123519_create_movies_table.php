@@ -18,6 +18,7 @@ return new class extends Migration
             $table->char('age_restriction', 2)->nullable();
             $table->string('description', 500);
             $table->timestamp('premieres_at');
+            $table->unsignedSmallInteger('running_time')->default(0)->nullable(false);
             $table->timestamps();
         });
     }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use App\Models\Movie;
 use App\Models\MovieBroadcast;
 use App\Http\Resources\MovieBroadcastResource;
@@ -13,24 +15,31 @@ class MovieBroadcastController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Movie $movie) : MovieBroadcastResource
+    public function index(Movie $movie) : AnonymousResourceCollection
     {
-        $broadcasts = $movie->broadcasts()->airingAndInFuture()->OrderBy('broadcasts_at')->paginate(10);
+        $broadcasts = $movie->broadcasts()->airingAndInFuture($movie->running_time)->OrderBy('broadcasts_at')->paginate(10);
+        $broadcasts->load('movie');
         
-        return new MovieBroadcastResource($broadcasts);
+        return MovieBroadcastResource::collection($broadcasts);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Movie $movie)
+    public function store(Request $request, Movie $movie) : MovieBroadcastResource
     {
-        $broadcast = $movie->broadcasts()->create(
-            $request->validate([
-                'channel_nr' => 'required|numeric',
-                'broadcasts_at' => 'required|date',
-            ])
-        );
+        $data = $request->validate([
+            'channel_nr' => 'required|numeric',
+            'broadcasts_at' => 'required|date',
+        ]);
+
+        $maxLimit = $movie->broadcasts()->channelMovieBroadcastingDate($data['channel_nr'], $data['broadcasts_at'])->first();
+
+        if ($maxLimit) {
+            throw ValidationException::withMessages(['broadcasts_at' => 'Movie is already broadcasted at the same day on the same channel']);
+        }
+
+        $broadcast = $movie->broadcasts()->create($data);
 
         return new MovieBroadcastResource($broadcast);
     }

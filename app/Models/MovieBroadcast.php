@@ -18,8 +18,14 @@ class MovieBroadcast extends Model
         return $this->belongsTo(Movie::class);
     }
 
-    public function scopeAiringAndInFuture(Builder $query): Builder
+    public function scopeAiringAndInFuture(Builder $query, int $running_time = 0): Builder
     {
-        return $query->where('broadcasts_at', '>=', now());
+        $timestamp = strtotime(date("Y-m-d H:i:s")) - ($running_time * 60);
+        return $query->where('broadcasts_at', '>=', date("Y-m-d H:i:s", $timestamp));
+    }
+
+    public function scopeChannelMovieBroadcastingDate(Builder $query, string $channel, string $datetime): Builder
+    {
+        return $query->where('channel_nr', $channel)->whereDate('broadcasts_at', date("Y-m-d", strtotime($datetime)));
     }
 }

@@ -13,7 +13,7 @@ class Movie extends Model
 
     public static $validAgeRestrictions = [0, 7, 12, 16];
 
-    protected $fillable = ['title', 'rating', 'age_restriction', 'description', 'premieres_at'];
+    protected $fillable = ['title', 'rating', 'age_restriction', 'description', 'premieres_at', 'running_time'];
 
     public function broadcasts() : HasMany
     {
