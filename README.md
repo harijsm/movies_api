@@ -4,6 +4,8 @@
     docker-compose up
 ```
 
+nokopēt ```.env.example``` un pārsaukt par ```.env```
+
 .env faila izmaiņas, lai pieslēgtos db:
 
 ```
