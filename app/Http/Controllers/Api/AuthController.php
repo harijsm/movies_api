@@ -14,7 +14,7 @@ class AuthController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request) : \Illuminate\Http\JsonResponse
+    public function login(Request $request): \Illuminate\Http\JsonResponse
     {
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -28,7 +28,7 @@ class AuthController extends Controller
         $token = $request->user()->createToken('authToken')->plainTextToken;
 
         return response()->json(['token' => $token]);
-    }   
+    }
 
     /**
      * Logout the authenticated user.
@@ -36,7 +36,7 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout(Request $request) : \Illuminate\Http\JsonResponse
+    public function logout(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->user()->tokens()->delete();
 

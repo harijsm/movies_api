@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use \Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 
 class Movie extends Model
@@ -16,7 +16,7 @@ class Movie extends Model
     protected $fillable = ['title', 'rating', 'age_restriction', 'description', 'premieres_at', 'running_time'];
 
 
-    public function broadcasts() : HasMany
+    public function broadcasts(): HasMany
     {
         return $this->hasMany(MovieBroadcast::class);
     }

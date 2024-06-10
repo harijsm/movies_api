@@ -30,7 +30,7 @@ class MovieBroadcastController extends Controller implements HasMiddleware
      * @param  \App\Models\Movie  $movie
      * @return \App\Http\Resources\MovieBroadcastCollection
      */
-    public function index(Movie $movie) : MovieBroadcastCollection
+    public function index(Movie $movie): MovieBroadcastCollection
     {
         $limit = request()->input('limit', 10);
         $broadcasts = $movie->broadcasts()->airingAndInFuture($movie["running_time"])->OrderBy('broadcasts_at')->paginate($limit);
@@ -46,7 +46,7 @@ class MovieBroadcastController extends Controller implements HasMiddleware
      * @return \App\Http\Resources\MovieBroadcastResource
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request, Movie $movie) : MovieBroadcastResource
+    public function store(Request $request, Movie $movie): MovieBroadcastResource
     {
         $data = $request->validate([
             'channel_nr' => 'required|numeric',
@@ -75,7 +75,7 @@ class MovieBroadcastController extends Controller implements HasMiddleware
      * @param  \App\Models\MovieBroadcast  $broadcast
      * @return \App\Http\Resources\MovieBroadcastResource
      */
-    public function show(Movie $movie, MovieBroadcast $broadcast) : MovieBroadcastResource
+    public function show(Movie $movie, MovieBroadcast $broadcast): MovieBroadcastResource
     {
         return new MovieBroadcastResource($broadcast);
     }
@@ -87,7 +87,7 @@ class MovieBroadcastController extends Controller implements HasMiddleware
      * @param MovieBroadcast $broadcast The movie broadcast instance.
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $movie, MovieBroadcast $broadcast) : \Illuminate\Http\Response
+    public function destroy(string $movie, MovieBroadcast $broadcast): \Illuminate\Http\Response
     {
         $broadcast->delete();
 

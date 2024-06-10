@@ -13,7 +13,7 @@ class MovieBroadcast extends Model
 
     protected $fillable = ['channel_nr', 'broadcasts_at'];
 
-    public function movie() : BelongsTo
+    public function movie(): BelongsTo
     {
         return $this->belongsTo(Movie::class);
     }

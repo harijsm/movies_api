@@ -14,7 +14,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class MovieController extends Controller implements HasMiddleware
 {
-
     public static function middleware(): array
     {
         return [
@@ -28,13 +27,13 @@ class MovieController extends Controller implements HasMiddleware
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(Request $request) : AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
         $title = $request->input('title');
         $limit = $request->input('limit', 10);
         $movies = Movie::query()->when(
             $title,
-            fn($query, $title) => $query->title($title)
+            fn ($query, $title) => $query->title($title)
         );
 
         return MovieResource::collection($movies->latest()->paginate($limit));
@@ -46,7 +45,7 @@ class MovieController extends Controller implements HasMiddleware
      * @param  \Illuminate\Http\Request  $request
      * @return \App\Http\Resources\MovieResource
      */
-    public function store(Request $request) : MovieResource
+    public function store(Request $request): MovieResource
     {
         $movie = Movie::query()->create(
             $request->validate([
@@ -67,7 +66,7 @@ class MovieController extends Controller implements HasMiddleware
      * @param  \App\Models\Movie  $movie
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Movie $movie) : \Illuminate\Http\Response
+    public function destroy(Movie $movie): \Illuminate\Http\Response
     {
         $movie->delete();
 
