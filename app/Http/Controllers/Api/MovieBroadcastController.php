@@ -9,6 +9,8 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use App\Models\Movie;
 use App\Models\MovieBroadcast;
 use App\Http\Resources\MovieBroadcastResource;
+use App\Http\Resources\MovieResource;
+use App\Http\Resources\MovieBroadcastCollection;
 
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -26,15 +28,14 @@ class MovieBroadcastController extends Controller implements HasMiddleware
      * Return a list of all broadcasts airing now or in the future for single movie.
      *
      * @param  \App\Models\Movie  $movie
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return \App\Http\Resources\MovieBroadcastCollection
      */
-    public function index(Movie $movie) : AnonymousResourceCollection
+    public function index(Movie $movie) : MovieBroadcastCollection
     {
         $limit = request()->input('limit', 10);
-        $broadcasts = $movie->broadcasts()->airingAndInFuture($movie->running_time)->OrderBy('broadcasts_at')->paginate($limit);
-        $broadcasts->load('movie');
-        
-        return MovieBroadcastResource::collection($broadcasts);
+        $broadcasts = $movie->broadcasts()->airingAndInFuture($movie["running_time"])->OrderBy('broadcasts_at')->paginate($limit);
+
+        return new MovieBroadcastCollection($broadcasts, $movie);
     }
 
     /**
@@ -60,8 +61,8 @@ class MovieBroadcastController extends Controller implements HasMiddleware
 
         $broadcast = $movie->broadcasts()->create($data);
 
-        if(!$movie->premieres_at && $broadcast) {
-            $movie->update(['premieres_at' => $broadcast->broadcasts_at]);
+        if(!$movie["premieres_at"] && $broadcast) {
+            $movie->update(['premieres_at' => $data["broadcasts_at"]]);
         }
 
         return new MovieBroadcastResource($broadcast);

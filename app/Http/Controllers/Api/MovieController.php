@@ -10,10 +10,11 @@ use App\Http\Resources\MovieResource;
 
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class MovieController extends Controller implements HasMiddleware
 {
-    
+
     public static function middleware(): array
     {
         return [
@@ -25,18 +26,18 @@ class MovieController extends Controller implements HasMiddleware
      * Display a list of all Movies.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \App\Http\Resources\MovieResource
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(Request $request) : MovieResource
+    public function index(Request $request) : AnonymousResourceCollection
     {
         $title = $request->input('title');
         $limit = $request->input('limit', 10);
-        $movies = Movie::when(
+        $movies = Movie::query()->when(
             $title,
             fn($query, $title) => $query->title($title)
         );
 
-        return new MovieResource($movies->latest()->paginate($limit));
+        return MovieResource::collection($movies->latest()->paginate($limit));
     }
 
     /**
@@ -47,13 +48,13 @@ class MovieController extends Controller implements HasMiddleware
      */
     public function store(Request $request) : MovieResource
     {
-        $movie = Movie::create(
+        $movie = Movie::query()->create(
             $request->validate([
                 'title' => 'required|max:100',
                 'rating' => 'required|numeric|between:0.0,10.0',
                 'age_restriction' => 'in:'.implode(',', Movie::$validAgeRestrictions),
                 'description' => 'required|max:500',
-                'premieres_at' => 'required|date',
+                'premieres_at' => 'date',
             ])
         );
 

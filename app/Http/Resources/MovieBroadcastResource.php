@@ -5,8 +5,18 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property mixin $id
+ * @property mixin $movie_id
+ * @property mixin $channel_nr
+ * @property mixin $broadcasts_at
+ * @property mixin $created_at
+ * @property mixin $updated_at
+ * @property MovieResource $movie
+ */
 class MovieBroadcastResource extends JsonResource
 {
+
     /**
      * Transform the resource into an array.
      *

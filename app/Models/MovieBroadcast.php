@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use \Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
 
 class MovieBroadcast extends Model
@@ -27,7 +27,7 @@ class MovieBroadcast extends Model
      */
     public function scopeAiringAndInFuture(Builder $query, int $running_time = 0): Builder
     {
-        return $query->where('broadcasts_at', '>=', now()->addMinute(-$running_time));
+        return $query->where('broadcasts_at', '>=', now()->addMinutes(-$running_time));
     }
 
     /**
